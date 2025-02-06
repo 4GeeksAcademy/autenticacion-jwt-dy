@@ -3,6 +3,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 """
 import os
 from flask import Flask, request, jsonify, url_for, send_from_directory
+from flask_jwt_extended import create_access_token, JWTManager, jwt_required
 from flask_migrate import Migrate
 from flask_swagger import swagger
 from api.utils import APIException, generate_sitemap
@@ -10,6 +11,9 @@ from api.models import db
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
+from flask_cors import CORS
+
+CORS(app)
 
 # from models import Person
 
@@ -36,6 +40,10 @@ setup_admin(app)
 
 # add the admin
 setup_commands(app)
+
+# Configura tu aplicación, incluyendo el JWTManager
+app.config['JWT_SECRET_KEY'] = 'tu_clave_secreta'
+jwt = JWTManager(app)  # Inicia JWTManager con la aplicación
 
 # Add all endpoints form the API with a "api" prefix
 app.register_blueprint(api, url_prefix='/api')

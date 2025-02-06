@@ -9,14 +9,11 @@ from flask_jwt_extended import create_access_token, JWTManager, jwt_required
 from werkzeug.security import generate_password_hash, check_password_hash
 
 api = Blueprint('api', __name__)
-app = Flask(__name__)
 
-# Configura la extensión Flask-JWT-Extended
-app.config["JWT_SECRET_KEY"] = "super-secret"  # ¡Cambia las palabras "super-secret" por otra cosa!
-jwt = JWTManager(app)
+
 
 # Allow CORS requests to this API
-CORS(api)
+CORS(app)
 
 
 @api.route('/hello', methods=['POST', 'GET'])
@@ -31,15 +28,16 @@ def handle_hello():
 @api.route('/signup', methods=['POST'])
 def registro():
     email = request.json.get("email")
-    firstname = request.json.get("firstname")
+    name = request.json.get("name")
     lastname = request.json.get("lastname")
     password = request.json.get("password")
 
+    print(f"Datos recibidos: {email}, {name}, {lastname}")  # Añade un log aquí
 
     if not email: 
         return jsonify({"error":"email es requerido"}), 400
-    if not firstname: 
-        return jsonify({"error":"firstname es requerido"}), 400
+    if not name: 
+        return jsonify({"error":"name es requerido"}), 400
     if not lastname: 
         return jsonify({"error":"lastname es requerido"}), 400
     if not password: 
@@ -53,7 +51,7 @@ def registro():
 
     user = User()
     user.email = email
-    user.firstname = firstname
+    user.name = name
     user.lastname = lastname
     user.password = generate_password_hash(password)
 
@@ -84,7 +82,7 @@ def login():
         return jsonify({"status": "fail", "message": "CREDENCIALES INCORRECTAS"}), 401
 
     access_token = create_access_token(identity=found.id, additional_claims={
-        "firstname": found.firstname,
+        "name": found.name,
         "lastname": found.lastname,
         "email": found.email,
     })

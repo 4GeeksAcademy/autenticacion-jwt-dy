@@ -31,7 +31,7 @@ export const Signup = () => {
 
 
         const data = {
-            firstname: name,
+            name: name,
             lastname: lastName,
             email: email,
             password: password,
@@ -51,21 +51,23 @@ export const Signup = () => {
                 alert("Registro Exitoso");
                 console.log("Usuario agregado correctamente");
                 navigate("/login"); // Redirige después de un registro exitoso
-            } else {
-                const errorData = await res.json();
-                throw new Error(errorData.message || "Error al registrar usuario");
-            }
-        } catch (error) {
-            console.warn(error);
-        }
-
-        // Resetear los campos
+                // Resetear los campos
         setName("");
         setLastName("");
         setEmail("");
         setPassword("");
         setConfirmPassword("");
         setErrorMessages([]);
+
+            } else {
+                const errorData = await res.json();
+                throw new Error(errorData.message || "Error al registrar usuario");
+            }
+        } catch (error) {
+            setErrorMessages([error.message]);  // Mostrar el mensaje de error a los usuarios
+            console.warn(error);
+        }
+
     };
 
     return (
