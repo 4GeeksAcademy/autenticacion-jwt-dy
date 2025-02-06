@@ -99,7 +99,7 @@ export const Login = () => {
                         />
                     </div>
                     {error && <p className="text-danger">{error}</p>}
-                    <button type="submit" className="btn btn-primary w-100 btnLogin text-dark">
+                    <button type="submit" className="btn btn-primary w-100 btnLogin text-light">
                         Iniciar Sesión
                     </button>
                 </form>
